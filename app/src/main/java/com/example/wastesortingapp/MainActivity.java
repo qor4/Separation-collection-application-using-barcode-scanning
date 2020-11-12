@@ -1,8 +1,10 @@
 package com.example.wastesortingapp;
 
-import androidx.appcompat.app.AppCompatActivity;
-
 import android.os.Bundle;
+import android.view.View;
+import android.widget.Toast;
+
+import androidx.appcompat.app.AppCompatActivity;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -11,4 +13,9 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
     }
+
+    public void Buttonscan(View v){
+        Toast.makeText(this, "버튼이 눌렸어요.", Toast.LENGTH_LONG).show();
+    }
+
 }
