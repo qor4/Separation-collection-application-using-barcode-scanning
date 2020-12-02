@@ -22,7 +22,10 @@ public class MainActivity extends AppCompatActivity {
     public void startBarcodeReader(View v){
         new IntentIntegrator(this).initiateScan();
     }
-
+    public void startBarcodeInsert(View v) {
+        Intent insertbarcode = new Intent(this, InsertBarcode.class);
+        startActivity(insertbarcode);
+    }
     @Override
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         IntentResult result = IntentIntegrator.parseActivityResult(requestCode, resultCode, data);
@@ -30,6 +33,9 @@ public class MainActivity extends AppCompatActivity {
             if(result.getContents() == null) {
                 Toast.makeText(this, "Error", Toast.LENGTH_LONG).show();
             } else {
+                Intent intent = new Intent(this, SecondActivity.class);   // 새로운 액티비티
+                intent.putExtra("RESULT", result.getContents());                  // 결과값을 RESULT라는 태그로 전달
+                startActivity(intent);
                 Toast.makeText(this, "scanned", Toast.LENGTH_LONG).show();
             }
         } else {
@@ -37,3 +43,5 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 }
+
+
