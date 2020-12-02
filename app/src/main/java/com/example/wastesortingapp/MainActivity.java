@@ -22,7 +22,10 @@ public class MainActivity extends AppCompatActivity {
     public void startBarcodeReader(View v){
         new IntentIntegrator(this).initiateScan();
     }
-
+    public void startBarcodeInsert(View v) {
+        Intent insertbarcode = new Intent(this, InsertBarcode.class);
+        startActivity(insertbarcode);
+    }
     @Override
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         IntentResult result = IntentIntegrator.parseActivityResult(requestCode, resultCode, data);
