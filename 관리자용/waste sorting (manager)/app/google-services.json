@@ -1,0 +1,48 @@
+{
+  "project_info": {
+    "project_number": "642980597849",
+    "firebase_url": "https://separation-collection-app.firebaseio.com",
+    "project_id": "separation-collection-app",
+    "storage_bucket": "separation-collection-app.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:642980597849:android:bee1c92e8ef7972c8ce148",
+        "android_client_info": {
+          "package_name": "com.example.wastesortingapp"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "642980597849-hfg4knmr1110mqriah8ng1gcmkept28b.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.example.wastesortingapp",
+            "certificate_hash": "1b13ad7540093ce0ffb4c82bea59a76fbff18253"
+          }
+        },
+        {
+          "client_id": "642980597849-t5ets1uvh69gj5sq9884hssapredu1eq.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDv7_1VTZf_rFkzsTyD0LRqZS90WlasIpk"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "642980597849-t5ets1uvh69gj5sq9884hssapredu1eq.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
