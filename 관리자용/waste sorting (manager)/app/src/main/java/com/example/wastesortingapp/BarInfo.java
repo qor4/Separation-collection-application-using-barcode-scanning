@@ -6,7 +6,7 @@ public class BarInfo {
     String title;
     String contents;
 
-    public BarInfo(String name, String title, String contents) {
+    public BarInfo(String num, String title, String contents) {
         this.num = num;
         this.title = title;
         this.contents = contents;

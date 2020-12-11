@@ -12,11 +12,11 @@ public class BarDatabase {
 
 	public static final String TAG = "BarDatabase";
 
-	public static BarDatabase database;
+	private static BarDatabase database;
 
 	public static String DATABASE_NAME = "bar1.db";
 
-	public static String TABLE_BAR_INFO = "Bar_INFO";
+	public static String TABLE_BAR_INFO = "BAR_INFO";
 
 	public static int DATABASE_VERSION = 1;
 
@@ -92,7 +92,7 @@ public class BarDatabase {
         }
 
         public void onCreate(SQLiteDatabase _db) {
-        	// TABLE_Bar_INFO
+        	// TABLE_BAR_INFO
         	println("creating table [" + TABLE_BAR_INFO + "].");
 
         	// drop existing table
@@ -116,15 +116,28 @@ public class BarDatabase {
             } catch(Exception ex) {
         		Log.e(TAG, "Exception in CREATE_SQL", ex);
         	}
+
 		}
 
         public void onOpen(SQLiteDatabase db) {
         	println("opened database [" + DATABASE_NAME + "].");
 
+//			db.execSQL( "delete from " + TABLE_BAR_INFO + ";" );
+
+        	insertRecord(db, "8809208062412", "새콤짱", "비닐");
+			insertRecord(db, "9791188694723", "수레바퀴 아래서", "종이");
+			insertRecord(db, "8809705641790","펭수마스크","일반");
+			insertRecord(db, "8806002006437","광동v라인옥수수수염차","페트병");
+			insertRecord(db, "4902430741897","페브리즈허브향","플라스틱");
+
         }
 
         public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
         	println("Upgrading database from version " + oldVersion + " to " + newVersion + ".");
+
+        	if (oldVersion < 2) {   // version 1
+
+        	}
 
         }
 
@@ -141,17 +154,14 @@ public class BarDatabase {
 	public void insertRecord(String num, String title, String contents) {
 		try {
 			db.execSQL( "insert into " + TABLE_BAR_INFO + "(NUM, TITLE, CONTENTS) values ('" + num + "', '" + title + "', '" + contents + "');" );
+			//db.execSQL( "delete from " + TABLE_BAR_INFO + ";" );
 		} catch(Exception ex) {
 			Log.e(TAG, "Exception in executing insert SQL.", ex);
 		}
 	}
 
-	public String selectAll(String checkname) {
+	public ArrayList<BarInfo> selectAll() {
 		ArrayList<BarInfo> result = new ArrayList<BarInfo>();
-
-		String strname="";
-
-//		db.execSQL( "delete from " + TABLE_BAR_INFO + ";" );
 
 		try {
 			Cursor cursor = db.rawQuery("select NUM, TITLE, CONTENTS from " + TABLE_BAR_INFO, null);
@@ -163,18 +173,13 @@ public class BarDatabase {
 
 				BarInfo info = new BarInfo(num, title, contents);
 				result.add(info);
-
-				if(checkname.equals(num)) {
-					strname = contents;
-				}
-
 			}
 
 		} catch(Exception ex) {
 			Log.e(TAG, "Exception in executing insert SQL.", ex);
 		}
 
-		return strname;
+		return result;
 	}
 
     private void println(String msg) {

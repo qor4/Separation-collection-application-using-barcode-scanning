@@ -1,24 +1,73 @@
 package com.example.wastesortingapp;
 
-import android.content.Intent;
 import android.os.Bundle;
-import android.view.View;
+import android.util.Log;
 import android.widget.Toast;
 
-import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.Toolbar;
+import androidx.fragment.app.Fragment;
 
-import com.google.zxing.integration.android.IntentIntegrator;
-import com.google.zxing.integration.android.IntentResult;
+import com.google.android.material.tabs.TabLayout;
+import com.pedro.library.AutoPermissions;
+import com.pedro.library.AutoPermissionsListener;
 
+import org.techtown.mission22.R;
 
-public class MainActivity extends AppCompatActivity {
+import java.util.ArrayList;
+
+public class MainActivity extends AppCompatActivity implements OnDatabaseCallback, AutoPermissionsListener {
+    private static final String TAG = "MainActivity";
+
+    Toolbar toolbar;
+
+    Fragment1 fragment1;
+    Fragment2 fragment2;
+
     BarDatabase database;
-    String Barcodenum;
+
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
+
+        toolbar = findViewById(R.id.toolbar);
+        setSupportActionBar(toolbar);
+
+        fragment1 = new Fragment1();
+        fragment2 = new Fragment2();
+
+        getSupportFragmentManager().beginTransaction().replace(R.id.container, fragment1).commit();
+
+
+        TabLayout tabs = findViewById(R.id.tabs);
+        tabs.addTab(tabs.newTab().setText("입력"));
+        tabs.addTab(tabs.newTab().setText("조회"));
+
+        tabs.setOnTabSelectedListener(new TabLayout.OnTabSelectedListener() {
+            @Override
+            public void onTabSelected(TabLayout.Tab tab) {
+                int position = tab.getPosition();
+                Log.d("MainActivity", "선택된 탭 : " + position);
+
+                Fragment selected = null;
+                if (position == 0) {
+                    selected = fragment1;
+                } else if (position == 1) {
+                    selected = fragment2;
+                }
+
+                getSupportFragmentManager().beginTransaction().replace(R.id.container, selected).commit();
+            }
+
+            @Override
+            public void onTabUnselected(TabLayout.Tab tab) { }
+
+            @Override
+            public void onTabReselected(TabLayout.Tab tab) { }
+        });
 
         // open database
         if (database != null) {
@@ -28,109 +77,55 @@ public class MainActivity extends AppCompatActivity {
 
         database = BarDatabase.getInstance(this);
         boolean isOpen = database.open();
+        if (isOpen) {
+            Log.d(TAG, "Bar database is open.");
+        } else {
+            Log.d(TAG, "Bar database is not open.");
+        }
 
+        AutoPermissions.Companion.loadAllPermissions(this, 101);
     }
-
-    public void startBarcodeReader(View v){
-        new IntentIntegrator(this).initiateScan();
-    }
-
-    public void startBarcodeInsert(View v) {
-        Intent insertbarcode = new Intent(this, InsertBarcode.class);
-        startActivityForResult(insertbarcode, 0);
-    }
-
-    public void login(View v)
-    {
-        Intent intent = new Intent(this, LoginActivity.class);
-        startActivity(intent);
-    }
-
-    public void real_login(View v){
-        Intent intent = new Intent(this, Real_loginActivity.class);
-        startActivity(intent);
-    }
-    public void manual(View v){
-        Intent intent = new Intent(this, introduce.class);
-        startActivity(intent);
-    }
-
 
     @Override
-    protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+    public void onRequestPermissionsResult(int requestCode, String permissions[],
+                                           int[] grantResults) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+        AutoPermissions.Companion.parsePermissions(this, requestCode, permissions, this);
+    }
 
-        String n="";
-        IntentResult result = IntentIntegrator.parseActivityResult(requestCode, resultCode, data);
+    @Override
+    public void onDenied(int requestCode, String[] permissions) {
+        Toast.makeText(this, "permissions denied : " + permissions.length,
+                Toast.LENGTH_LONG).show();
+    }
 
-        if (requestCode == 0){
-            if(resultCode == RESULT_OK){
-                Barcodenum = data.getStringExtra("Barcodenum");
-                Toast.makeText(this, "결과 : "+Barcodenum, Toast.LENGTH_LONG).show();
-                n = Barcodenum;
-            }
-        }
-        else{
-            if(result != null) { //정상적으로 스캔
-                if(result.getContents() == null) {
-                    Toast.makeText(this, "Error", Toast.LENGTH_LONG).show();
-                } else {
-                    n = result.getContents();
-                    Toast.makeText(this, "Scanned", Toast.LENGTH_LONG).show();
-                }
-            } else {
-                super.onActivityResult(requestCode, resultCode, data);
-            }
-        }
+    @Override
+    public void onGranted(int requestCode, String[] permissions) {
+        Toast.makeText(this, "permissions granted : " + permissions.length, Toast.LENGTH_LONG).show();
+    }
 
 
-        String result2 = database.selectAll(n);
-
-        if(result2.equalsIgnoreCase("종이"))
-        {
-            Toast.makeText(this, "if문 들어옴", Toast.LENGTH_LONG).show();
-            Intent paper = new Intent(this, Paper.class);
-            startActivity(paper);
+    protected void onDestroy() {
+        // close database
+        if (database != null) {
+            database.close();
+            database = null;
         }
 
-        if(result2.equalsIgnoreCase("박스"))
-        {
-            Intent box = new Intent(this, box.class);
-            startActivity(box);
-        }
+        super.onDestroy();
+    }
 
-        if(result2.equalsIgnoreCase("유리병"))
-        {
-            Intent glassbottle = new Intent(this, Glassbottle.class);
-            startActivity(glassbottle);
-        }
+    @Override
+    public void insert(String num, String title, String contents) {
+        database.insertRecord(num, title, contents);
+        Toast.makeText(getApplicationContext(), "정보를 추가했습니다.", Toast.LENGTH_LONG).show();
+    }
 
-        if(result2.equalsIgnoreCase("캔"))
-        {
-            Intent intent = new Intent(this, Can.class);
-            startActivity(intent);
-        }
+    @Override
+    public ArrayList<BarInfo> selectAll() {
+        ArrayList<BarInfo> result = database.selectAll();
+        Toast.makeText(getApplicationContext(), "정보를 조회했습니다.", Toast.LENGTH_LONG).show();
 
-        if(result2.equalsIgnoreCase("고철"))
-        {
-            Intent intent = new Intent(this, Iron.class);
-            startActivity(intent);
-        }
-
-        if(result2.equalsIgnoreCase("노트"))
-        {
-            Intent intent = new Intent(this, Note.class);
-            startActivity(intent);
-        }
-
-        if(result2.equalsIgnoreCase("종이팩"))
-        {
-            Intent intent = new Intent(this, Paperpack.class);
-            startActivity(intent);
-        }
-
-
-
-        Toast.makeText(getApplicationContext(), "정보를 조회했습니다."+result2, Toast.LENGTH_LONG).show();
-
+        return result;
     }
 }

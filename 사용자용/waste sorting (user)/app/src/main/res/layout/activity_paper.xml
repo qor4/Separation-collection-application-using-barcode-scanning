@@ -4,37 +4,16 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="@color/white"
     tools:context=".Paper">
 
     <ImageView
-        android:id="@+id/imageView"
-        android:layout_width="380dp"
-        android:layout_height="300dp"
-        android:layout_marginTop="150dp"
-        android:layout_marginBottom="126dp"
-        app:layout_constraintBottom_toTopOf="@+id/textView"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.454"
+        android:id="@+id/imageView2"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:srcCompat="@drawable/paper" />
+        app:srcCompat="@drawable/realpaper" />
 
-    <TextView
-        android:id="@+id/textView"
-        android:layout_width="359dp"
-        android:layout_height="283dp"
-        android:layout_marginStart="24dp"
-        android:layout_marginBottom="150dp"
-        android:text="                                       1.종이류&amp;종이팩\n
 
-&lt;종이&gt;\n
-            - 물기를 제거한 후 배출\n
-            - 비닐, 기타 오물이 섞이지 않게 함\n
-
-&lt;살균팩, 멸균팩&gt;\n
-            -내용물을 비우고 물로 헹군 후 압착하여\n              봉투에 넣거나 한데 묶어서 배출\n
-            -빨대, 비닐 등 다른 재질은 제거한 후 배출 "
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/imageView" />
 </androidx.constraintlayout.widget.ConstraintLayout>

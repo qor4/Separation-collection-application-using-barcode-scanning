@@ -19,9 +19,29 @@
         android:label="@string/app_name"
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
-        android:theme="@style/Theme.WasteSortingApp">
-        <activity android:name=".Paper"></activity>
-        <activity android:name=".InsertBarcode"></activity>
+        android:theme="@style/Theme.AppCompat.NoActionBar">
+        <activity
+            android:name=".Waste"
+            android:label="@string/title_activity_waste"
+            android:theme="@style/NoActionBar"></activity>
+        <activity android:name=".PlasticBag" />
+        <activity android:name=".Pet" />
+        <activity android:name=".BarIcecream" />
+        <activity android:name=".CupNoodle" />
+        <activity android:name=".introduce" />
+        <activity android:name=".Paperpack" />
+        <activity android:name=".Real_loginActivity" />
+        <activity
+            android:name=".FirebasePost"
+            tools:ignore="Instantiatable" />
+        <activity android:name=".LoginActivity" />
+        <activity android:name=".Note" />
+        <activity android:name=".Iron" />
+        <activity android:name=".Can" />
+        <activity android:name=".Glassbottle" />
+        <activity android:name=".box" />
+        <activity android:name=".Paper" />
+        <activity android:name=".InsertBarcode" />
         <activity android:name=".MainActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
